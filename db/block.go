@@ -78,8 +78,8 @@ func (i *BlockFile) ScanEntries(fn BlockScanFunc) (err error) {
 // WriteEntry insert a entry
 func (i *BlockFile) WriteEntry(e BlockEntry) (err error) {
 	buf := make([]byte, 16, 16)
-	encodeInt64(buf, e.Epoch)
-	encodeInt64(buf[8:], int64(len(e.Payload)))
+	binary.BigEndian.PutUint64(buf, uint64(e.Epoch))
+	binary.BigEndian.PutUint64(buf[8:], uint64(len(e.Payload)))
 	if _, err = i.Write(buf); err != nil {
 		return
 	}
